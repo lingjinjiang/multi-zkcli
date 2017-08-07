@@ -54,7 +54,7 @@ public class MultiZk {
         for (int i = 0; i < numThreads; i++) {
             try {
                 ZookeeperThread zkThread = new ZookeeperThread(urls, intervalMs);
-                zkThread.run();
+                zkThread.start();
                 zookeeperThreads.add(zkThread);
             } catch (IOException e) {
                 System.out.println(e.toString());
@@ -180,14 +180,14 @@ public class MultiZk {
         public void run() {
             super.run();
             try {
-//                while (zookeeper != null && zookeeper.getState().isAlive()) {
+                while (zookeeper != null && zookeeper.getState().isAlive()) {
                     Thread.sleep(interval);
                     zookeeper.exists("/", new Watcher() {
                         public void process(WatchedEvent watchedEvent) {
 
                         }
                     });
-//                }
+                }
             } catch (InterruptedException e) {
                 System.out.println(e.toString());
                 logger.error("Unknown error happened", e);
